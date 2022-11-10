@@ -1,9 +1,6 @@
 from flask import Flask
 from flask import request
 import json
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 from flask import jsonify
 import connectdb
 
@@ -21,9 +18,8 @@ def check():
 def getList():
     content = request.args.get('numberOfMusics')
     musicList = connectdb.getMusicList(int(content))
-    contents = {"response": musicList}
-    #return jsonify(contents)
-    return "OK"
+    contents = {"musicList": musicList}
+    return jsonify(contents)
 
 
 

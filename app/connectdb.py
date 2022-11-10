@@ -63,7 +63,27 @@ def post2db(data):
     return True
 
 def getMusicList(numberOfMusics):
+    files = './MusicDictionary.csv'
+    f = open(files, 'r')
+    data = f.read()
+    f.close()
+    lst1 = data.split(',')
+
     musicList = []
-    doc_ref = db.collection('collectedData').list_documents()
-    musicList.append(len(list(doc_ref)))
-    return musicList
+
+    musicDict = {}
+    for lst in lst1:
+        numberOfAnnotation = len(list(db.collection(lst).list_documents()))
+        musicDict[lst] = numberOfAnnotation
+    
+    musicDict = sorted(musicDict.items(),key=lambda x:x[1])
+    musicDict = dict((x, y) for x, y in musicDict)
+
+    musicList = list(musicDict.keys())
+
+    musicListByNumberStr = []
+    for i in range(numberOfMusics):
+        musicListByNumberStr.append(musicList[i])
+
+    musicListByNumber = [int(s) for s in musicListByNumberStr]
+    return musicListByNumber
